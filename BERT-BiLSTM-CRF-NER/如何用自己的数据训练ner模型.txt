@@ -1,0 +1,30 @@
+会发现train_ner函数中存在from bert_base.train.train_helper import get_args_parser
+根据github的介绍以及结合经验，只需要在bert_base文件下train文件夹中的train_helper文件中修改相应参数便可
+打开train_helper文件
+需要修改的部分：
+1、
+    if os.name == 'nt':   #这里指windows操作系统
+        bert_path = 'F:\chinese_L-12_H-768_A-12'   #可以看出来这是BERT预训练好的中文模型的文件夹路径
+        root_path = r'C:\workspace\python\BERT-BiLSTM-CRF-NER' #这是该github项目的路径
+    else:
+        bert_path = '/home/macan/ml/data/chinese_L-12_H-768_A-12/'
+        root_path = '/home/macan/ml/workspace/BERT-BiLSTM-CRF-NER'
+2、
+    group1.add_argument('-data_dir', type=str, default=os.path.join(root_path, 'NERdata'),
+                        help='train, dev and test data dir')
+    这用于指定数据的路径，若不想进一步修改bert_base文件夹下train文件夹中bert_lstm_ner.py文件中数据预处理方面的代码
+    你自己的数据必须以utf-8格式train.txt、dev.txt、test.txt命名
+    数据的样式如下
+    这 o
+    是 o
+    测 o
+    试 o
+    但是bert_lstm_ner.py文件中124行的类别标签部分必须要根据自己的数据进行修改
+3、
+group1.add_argument('-output_dir', type=str, default=os.path.join(root_path, 'output'),
+                        help='directory of a pretrained BERT model')
+测试集的结果以及检测点都会存在默认的输出文件output中，这个目录可以修改
+4、
+group2.add_argument('-device_map', type=str, default='0',
+                        help='witch device using to train')
+用以指定默认的GPU

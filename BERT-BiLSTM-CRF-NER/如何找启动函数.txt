@@ -1,0 +1,10 @@
+github中提供的安装方法是python3 setup.py install
+运行ner训练模型的命令是bert-base-ner-train
+启动服务的命令是bert-base-serving-start
+找到setup.py这个文件，发现会有以下代码：
+entry_points={
+        'console_scripts': ['bert-base-serving-start=bert_base.runs:start_server',
+                            'bert-base-ner-train=bert_base.runs:train_ner'],
+    },
+这就是接收相应参数时所执行的内容，找到bert_base文件夹下的runs文件夹，发现其中就一个__init__文件，打开便能看到
+train_ner和start_server两个函数

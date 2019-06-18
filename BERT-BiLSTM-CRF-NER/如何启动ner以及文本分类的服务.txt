@@ -1,0 +1,21 @@
+看start_server()中导入的
+from bert_base.server.helper import get_run_args
+找到helper.py文件中的get_run_args部分
+github中提供的启动方法为：
+bert-base-serving-start \
+    -model_dir C:\workspace\python\BERT_Base\output\ner2 \
+    -bert_model_dir F:\chinese_L-12_H-768_A-12
+    -model_pb_dir C:\workspace\python\BERT_Base\model_pb_dir
+    -mode CLASS
+    -max_seq_len 202
+也就是必须在get_run_args部分赋值的变量有model_dir 这个文件夹中必须包括的文件有：
+1）你自己的分类模型训练好后的checkpoint文件
+2）如果你不想修改bert_base文件夹下server文件夹中__init__.py文件内init_predict_var部分的代码
+你必须还准备好通过pickle存储的名为label_list.pkl文件以及label2id.pkl文件，
+其中label_list.pkl存的是一个list，list包含的内容是你自己分类模型所有类别标签
+label2id.pkl文件存的是一个字典，字典的key是类别标签，value是id,一般id从0开始往后加1
+bert_model_dir  变量指定chinese_L-12_H-768_A-12的路径
+model_pb_dir可以不指定，会自动把你的checkpoint封装成pb文件
+由bert_base文件夹下server文件夹中graph.py文件指定生成的pb文件在predict_optimizer文件夹中分类classification_model.pb，ner则为ner_model.pb
+pb文件只会在你第一次启动服务时生成，随后会直接加载
+mode 默认的是NER，启动分类的服务必须改为CLASS
